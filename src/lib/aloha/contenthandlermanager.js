@@ -24,65 +24,80 @@
  * provided you include this license notice and a URL through which
  * recipients can access the Corresponding Source.
  */
-/*global define:true */
-define(
-['jquery', 'aloha/registry', 'util/class', 'aloha/console'],
-function (jQuery, Registry, Class, console) {
-	"use strict";
+define([
+	'aloha/core',
+	'aloha/registry',
+	'util/class',
+	'aloha/console'
+], function (
+	Aloha,
+	Registry,
+	Class,
+	console
+) {
+	'use strict';
 
 	/**
-	 * Create an contentHandler from the given definition. Acts as a factory method
-	 * for contentHandler.
+	 * Create an contentHandler from the given definition.  Acts as a factory
+	 * method for contentHandler.
 	 *
-	 * @param {Object} definition
+	 * @param {ContentHandlerManager} definition
 	 */
-	return new (Registry.extend({
+	var ContentHandlerManager = Registry.extend({
 
 		createHandler: function (definition) {
-			
 			if (typeof definition.handleContent !== 'function') {
 				throw 'ContentHandler has no function handleContent().';
 			}
-
 			var AbstractContentHandler = Class.extend({
 				handleContent: function (content) {
 					// Implement in subclass!
 				}
 			}, definition);
-			
 			return new AbstractContentHandler();
 		},
-		
-		handleContent: function (content, options) {
-			var handler, id,
-				ids = this.getIds();
 
-			if (typeof options.contenthandler === 'undefined') {
-				options.contenthandler = [];
-				for (id in ids) {
-					if (ids.hasOwnProperty(id)) {
-						options.contenthandler.push(ids[id]);
-					}
-				}
+		/**
+		 * Manipulates the given contents of an editable by invoking content
+		 * handlers over the contents.
+		 *
+		 * @param {string} content The contents of an editable which will be
+		 *                         handled.
+		 * @param {object} options Used to filter limit which content handlers
+		 *                         should be used.
+		 * @param {Aloha.Editable} The editable whose content is being handled.
+		 * @return {string} The handled content.
+		 */
+		handleContent: function (content, options, editable) {
+			var manager = this;
+
+			// Because if no options is specified to indicate which content
+			// handler to use, then all that are available are used.
+			var handlers = options ? options.contenthandler : manager.getIds();
+
+			if (!handlers) {
+				return content;
 			}
 
-			for (id in options.contenthandler) {
-				if (options.contenthandler.hasOwnProperty(id)) {
-					handler = this.get(options.contenthandler[id]);
-					if (handler) {
-						if (typeof handler.handleContent === 'function') {
-							content = handler.handleContent(content, options);
-						} else {
-							console.error('A valid content handler needs the method handleContent.');
-						}
-					}
-					if (null === content) {
-						break;
-					}
+			var i;
+			var handler;
+			for (i = 0; i < handlers.length; i++) {
+				handler = manager.get(handlers[i]);
+				if (handler) {
+					content = handler.handleContent(content, options,
+							editable || Aloha.activeEditable);
+				}
+
+				// FIME: Is it ever valid for content to be null?  This breaks
+				//       the handleContent(string):string contract.
+				if (null === content) {
+					break;
 				}
 			}
 
 			return content;
 		}
-	}))();
+	});
+
+	return new ContentHandlerManager();
 });

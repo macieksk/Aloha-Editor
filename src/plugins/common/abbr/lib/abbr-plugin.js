@@ -55,11 +55,6 @@ define([
 	 */
 	return Plugin.create( 'abbr', {
 		/**
-		 * Configure the available languages
-		 */
-		languages: [ 'en', 'de' ],
-
-		/**
 		 * default button configuration
 		 */
 		config: [ 'abbr' ],
@@ -104,6 +99,15 @@ define([
 		    	name: 'abbrText',
 		        scope: 'abbr'
 		    });
+		    
+		    this.remAbbrButton = Ui.adopt("removeAbbr", Button, {
+				tooltip: i18n.t('button.remabbr.tooltip'),
+				icon: 'aloha-icon aloha-icon-abbr-rem',
+				scope: 'abbr',
+				click: function () {
+					me.removeAbbr();
+				}
+			});
 		},
 
 		/**
@@ -151,19 +155,15 @@ define([
 				if (!Aloha.activeEditable || !Aloha.activeEditable.obj) {
 					return;
 				}
-
 				var config = me.getEditableConfig(Aloha.activeEditable.obj);
-				editableConfig[
-					Aloha.activeEditable.getId()
-				] = jQuery.inArray('abbr', config) !== -1;
+				editableConfig[Aloha.activeEditable.getId()] =
+						jQuery.inArray('abbr', config) !== -1;
 			});
 
 			Aloha.bind('aloha-editable-destroyed', function () {
-				if (!Aloha.activeEditable || !Aloha.activeEditable.obj) {
-					return;
+				if (Aloha.activeEditable && Aloha.activeEditable.obj) {
+					delete editableConfig[Aloha.activeEditable.getId()];
 				}
-
-				delete editableConfig[Aloha.activeEditable.getId()];
 			});
 
 			Aloha.bind('aloha-selection-changed', function (event, range) {

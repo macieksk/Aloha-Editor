@@ -28,7 +28,6 @@ define([
 	'aloha/plugin',
 	'ui/ui',
 	'ui/toggleButton',
-	'flag-icons/flag-icons-plugin',
 	'i18n!metaview/nls/i18n',
 	'i18n!aloha/nls/i18n',
 	'jquery'
@@ -36,13 +35,11 @@ define([
 	Plugin,
     Ui,
 	ToggleButton,
-	FlagIcons,
 	i18n,
 	i18nCore,
 	jQuery
 ) {
 	'use strict';
-
 	var GENTICS = window.GENTICS,
 		Aloha = window.Aloha;
 
@@ -52,12 +49,6 @@ define([
 		},
 		
 		config: [ 'metaview' ],
-		
-		/**
-		 * Configure the available languages
-		 */
-		languages: ['en', 'de'],
-
 		/**
 		 * Initialize the plugin
 		 */
@@ -71,15 +62,35 @@ define([
 					"aloha-editable-activated",
 					function (jEvent, aEvent) {
 						var config;
-						config = that.getEditableConfig( Aloha.activeEditable.obj );
- 						if (jQuery.type(config) === 'array' && jQuery.inArray( 'metaview', config ) !== -1) {
+						config = that.getEditableConfig(Aloha.activeEditable.obj);
+
+						if (jQuery.type(config) === 'array' && jQuery.inArray('enabled', config) !== -1) {
+							jQuery(Aloha.activeEditable.obj).addClass('aloha-metaview');
+						}
+
+ 						if (jQuery.type(config) === 'array' && jQuery.inArray('metaview', config) !== -1) {
 							that._toggleMetaViewButton.show(true);
 						} else {
 							that._toggleMetaViewButton.show(false);
 							return;
 						}
 						
-						if ( /* that.button && */ jQuery(Aloha.activeEditable.obj).hasClass('aloha-metaview')) {
+						if (jQuery(Aloha.activeEditable.obj).hasClass('aloha-metaview')) {
+							that._toggleMetaViewButton.setState(true);
+						} else {
+							that._toggleMetaViewButton.setState(false);
+						}
+					}
+			);
+			Aloha.bind(
+					"aloha-editable-deactivated",
+					function (jEvent, aEvent) {
+						var config;
+						config = that.getEditableConfig(Aloha.activeEditable.obj);
+
+						jQuery(Aloha.activeEditable.obj).removeClass('aloha-metaview');
+						
+						if (jQuery(Aloha.activeEditable.obj).hasClass('aloha-metaview')) {
 							that._toggleMetaViewButton.setState(true);
 						} else {
 							that._toggleMetaViewButton.setState(false);

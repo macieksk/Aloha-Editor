@@ -5,14 +5,216 @@ This document is to serve as a "what has been done" in terms of the [Roadmap](ht
 
 All changes are categorized into one of the following keywords:
 
-- **BUG**: The change fixes a bug.
-- **ENHANCEMENT**: The change improves the software, but otherwise makes no
-                   functional change to any feature.
+- **MANUAL CHANGE**: The change requires changes to existing implementation.
 - **FEATURE**: The change introduces a new feature, or modifies the function,
                usage, or intent of an existing one.
-- **MANUAL CHANGE**: The change requires changes to existing implementation.
+- **ENHANCEMENT**: The change improves the software, but otherwise makes no
+                   functional change to any feature.
+- **BUG**: The change fixes a bug.
 
-# 0.22.x
+## 0.22.7 - 2013/01/08
+
+- **FEATURE**: textcolor-plugin: Introducing the textcolor plugin, which will allow you to apply color to sections of text
+- **FEATURE**: table-plugin: Introducing table cell resize capabilities [table plugin](http://www.aloha-editor.org/guides/plugin_table.html) - Note: the feature is currently disabled by default.
+- **BUG**: table-plugin: Tables inside blocks will no longer be transformed
+           into editable Aloha Editor tables.
+- **BUG**: table-plugin: Fixed the cursor problem with ie7. Now ie7 shows the 
+           system default arrows.
+- **BUG**: core: getEditableHost() returns nearest editable rather than the
+           furthest.
+- **BUG**: blocks: Selecting with <CTRL>+A, when inside of a nested editable,
+           will now only select all of the contents of the immediate editable,
+           rather the contents of parent editables as well.
+- **BUG**: ui: Floating toolbar will attempt to adjust is positioning to remain
+		   entirely in the viewport whenever possible.
+- **BUG**: core: Fixes numerous issues with repository manager including how
+           query() and getChildren() handle immediate, and asynchronous
+           repositories.
+- **BUG**: vendor/repository-browser: Updates repository browser with fix to
+		   not listing repository folders multiple times into wrong repositories
+		   on the tree.
+- **BUG**: core: Fixed disappearing attributes in browsers that do not support
+           outerHTML.
+- **BUG**: link-plugins: Fixed inserting of links so that links that span
+           multiple elements are not unnecessarily split into fragments.
+- **BUG**: image-plugin: Fix numerous bugs with resizing and cropping and
+           improve overall usability
+
+
+## 0.22.6 - 2012/12/10
+
+- **ENHANCEMENT**: documentation: Guides and documentation was improved for the validation plugin 
+
+## 0.22.5 - 2012/12/04
+
+- **FEATURE**: validation-plugin: Introducing [validation plugin](http://www.aloha-editor.org/guides/plugin_validation.html)
+- **BUG**: metaview-plugin: We now disable the metaview once the editable is deactivated.
+- **BUG**: core: Some i18n strings within some modal dialog buttons were fixed.  
+- **BUG**: core: Fixed Aloha's initialization order to ensure that repositorymanager will be initialized before plugins are initialized.
+
+## 0.22.4 - 2012/12/03
+
+- **FEATURE**: core: makeClean is in the process of being obsoleted in favor of the aloha/ephemera.js module. See http://aloha-editor.org/guides/writing_plugins.html
+- **ENHANCEMENT**: table plugin: IE fix -- the selection of multiple cells was not possible when the selection started in the text; there was no workaround so it's now possible to select coherent cells when you "shift-click" into the second cell of the range you want to select
+- **ENHANCEMENT**: The metaview view can now be enabled per editable.
+Aloha.settings = {
+			plugins: {
+				metaview: {
+					editables: {
+						'#top-text': ['metaview','enabled']
+					}
+				}
+			}
+		};
+
+- **BUG**: formatlesspaste-plugin: Formatless Paste Plugin fixed to correctly
+           process configuration settings.
+- **BUG**: table-plugin: Ensures that the range is maintained when clicking
+		   inside table cells.
+- **BUG**: the underline button didn't show up in the toolbar
+           after adding the 'u' in the format-plugin configuration.
+- **BUG**: All repositories have been queried even if a target repository has been spezified. Now only the spezified repository is queried.
+- **BUG**: core/aloha-links: Prevents yellow borders around aloha-links blocks
+- **BUG**: link-plugin: link scope remains active after the selection leaves an anchor element
+- **BUG**: blocks: The floating menu will appear when the editor double-clicks
+           in an editable block.
+- **BUG**: core/selection: Aloha no longer inadvertently removes ranges that
+		   are outside of editables.
+- **BUG**: characterpicker: popup now follows the floating menu while scrolling
+- **BUG**: dom utils: fixes potential bug that may cause attributes with the
+		   slash '/' character in the name to appear in the result of
+		   getContents().
+- **BUG**: word content handler: Fixed handling of pasted MS Word content to
+           not result in broken markup when the content contains tables with
+           cells that are all empty.
+- **BUG**: core/plugins: Fixed plugin initialization to ensure that the
+		   "aloha-ready" event is not fired before all plugins have notified
+		   that they are fully initialized.
+- **BUG**: characterpicker & horizontalruler: Fixes icon styling to display
+		   correct images event when a user-specified jquery ui stylsheet is
+		   included in the page.
+- **BUG**: block-plugin: Fixed activation of correct block when active editable
+		   is changed using Keys (Tab, Shift-Tab) or programmatically.
+- **BUG**: block-plugin: Fixed handling of copy & paste in editables that are
+		   nested inside blocks. Before this fix, when pressing CTRL-C to copy
+		   the current selection in an editable nested inside a block, the whole
+		   block was selected and copied.
+
+## 0.22.3 - 2012/11/06
+
+- **MANUAL CHANGE**: Updated UI CSS regarding button selector;
+- **MANUAL CHANGE**: Added a demo of placeholders to boilerplate;
+- **FEATURE**: align-plugin: The align plugin is now capable of aligning table cell contents.
+- **FEATURE**: core: makeClean is in the process of being obsoleted in favor of the aloha/ephemera.js module. See http://aloha-editor.org/guides/writing_plugins.html
+- **FEATURE**: improved translation export from gengo.com to Aloha Editor
+	<code>
+	Aloha.settings.plugins: {
+		captionedImage: {
+			allowLinebreak: [ 'p' ], // ['br', 'p'], true or false (default)
+		}
+	}
+	</code>
+- **ENHANCEMENT**: browser: The old browser plugin was removed. The browser-plugin was replaced by the repository browser vendor plugin. 
+- **ENHANCEMENT**: RepositoryBrowser: The repository browser will now correctly handle localisation for the languages english and german.
+- **ENHANCEMENT**: Trigger the 'aloha-smart-content-changed' event with `triggerType` = `block-change` whenever an attribute of an Aloha Block is changed.
+- **BUG**: table-plugin: Fixed a javascript error that occurred when pressing enter in the table wai attribute field.
+- **BUG**: Fix base tag breaks Aloha Editor UI
+- **BUG**: Fix calling mahalo in a blur event handler
+- **BUG**: Fix support for editable anchor elements
+- **BUG**: All repositories have been queried even if a target repository
+
+	has been specified. Now only the specified repository is queried.
+
+- **BUG**: core/aloha-links: Prevents yellow borders around aloha-links blocks
+- **BUG**: link-plugin: link scope remains active after the selection leaves an anchor element
+- **BUG**: blocks: The floating menu will appear when the editor double-clicks
+           in an editable block.
+- **BUG**: core/selection: Aloha no longer inadvertently removes ranges that
+		   are outside of editables.
+- **BUG**: added aloha-cleanme class to aloha-block-handle to prevent potential
+		   issues with temporary elements not being cleaned up.
+
+- **FEATURE**: align-plugin: the align plugin is now capable of aligning table cell contents
+- **FEATURE**: table-plugin: table cells can now have individual classes like rows and columns
+
+## 0.22.2 - 2012/10/08
+
+- **FEATURE**: core: makeClean is in the process of being obsoleted in favor of the aloha/ephemera.js module. See http://aloha-editor.org/guides/writing_plugins.html
+- **BUG**: table-plugin: A javascript error was fixed that occured when removing the whole table.
+
+## 0.22.1 - 2012/09/26
+
+- **FEATURE**: core: Added method Aloha.getEditableHost() to get the editable, that contains the given jQuery object.
+
+- **FEATURE**: repository browser: If one of the repositories runs into a timeout during query, the browser will now call the method handleTimeout().
+
+- **FEATURE**: abbr-plugin: We added a remove abbreviation button to make the functionality more consistent with the wai-lang plugin.
+
+- **FEATURE**: metaview: We now also display HR tags in the metaview. We also 
+				removed the dependency to the flag-icons plugin.
+
+- **FEATURE**: list-plugin: When transforming a list from ul to ol or back all sub elements that are selected are also transformed.
+
+- **ENHANCEMENT**: Aloha Blocks will now publish a message on the channel
+                   "aloha.blocks.initialized" when a block is fully initialized.
+                   
+- **ENHANCEMENT**: The Block Plugin now allows you to configure your own root tags 
+				   for block creation. Every time you create a new block, the block 
+				   plugin will check if its root node is supported. You may now change 
+				   the roots nodes and use your own list root tags. If you want 
+				   to use Aloha Blocks drag'n drop functionalities we strongly 
+				   suggest that you do not use other root tags than div and span.
+				   See the guides at http://www.aloha-editor.org/guides/plugin_block.html 
+				   for further information.
+
+- **ENHANCEMENT**: Aloha Editor will no longer annotate end <br> tags, which
+				   are used to prop up empty block-level elements that would be
+				   otherwise rendererd invisbly, with the "aloha-end-br" class.
+				   This should result in cleaner markup.
+
+
+                   
+
+- **BUG**: Added missing icon for the block plugins toggledragdrop button
+
+- **BUG**: Rangy Core: Patches Rangy to include a workaround for html5shiv's
+        violation of document.createElement().
+
+        As detailed in this discussion:
+        https://github.com/aFarkas/html5shiv/issues/64: html5shiv monkey
+        patches the native document.createElement() function in browsers like
+        IE8 and older, which do no support HTML5.  However, it does in a way
+        that seriously deviates from the contract that the native
+        document.createElement() function establishes, because it creates
+        elements which have non-null siblings and parentNode.
+
+        This violation causes Rangy to throw an exception in IE8 or IE7.
+
+        The workaround prevents this error by detaching the element that was
+        created via html4shiv's implementation of document.createElement() from
+        its parentNode, near the critical area of code where the exception
+        occurs.
+
+- **BUG**: Moved call to execCommand('enableObjectResizing', false, false) to init method of editable.
+		Otherwise, FF 15 (and above) will throw a JS error, if execCommand('enableObjectResizing', false, false)
+		is called with no contenteditable elements found in the page.
+
+- **BUG**: Fixed Javascript error when doing searches in the repository browser (which caused to search to not be done).
+
+- **BUG**: added the del format button to the possible format plugin buttons
+
+	The del button is not enabled by default. To enable it, it has to
+	be configured. For example
+
+	Aloha.settings.plugins.format.config = ['del', ...];
+
+	See http://aloha-editor.org/guides/plugin_format.html
+
+- **BUG**: characterpicker-plugin: Fixed a bug that when inserting a special character using the character picker plugin, the focus would be sometimes set to the start of the active editable (e.g. when inserting into a table cell).
+
+- **BUG**: listenforcer-plugin: Fixed a bug that would only mark the first editable matching a configured selector as an enforced editable. Also when leaving an editable, we now remove the added list properly.
+
+- **BUG**: core: Sometimes when putting the cursor at the first position of an editable, the cursor would vanish or be put outside the editable. This has been fixed.
 
 ## 0.22.0 - 2012/09/03
 
@@ -539,6 +741,18 @@ All changes are categorized into one of the following keywords:
 
 
 # 0.20.x
+
+## 0.20.24 - 2012/09/26
+
+- **FEATURE**: metaview: We now also display HR tags in the metaview. We also removed the dependency to the flag-icons plugin.
+- **FEATURE**: list-plugin: When transforming a list from ul to ol or back all sub elements that are selected are also transformed.
+- **FEATURE**: core: Added method Aloha.getEditableHost() to get the editable, that contains the given jQuery object.
+- **FEATURE**: repository browser: If one of the repositories runs into a timeout during query, the browser will now call the method handleTimeout().
+- **BUG**: characterpicker-plugin: Fixed a bug that when inserting a special character using the character picker plugin, the focus would be sometimes set to the start of the active editable (e.g. when inserting into a table cell).
+- **BUG**: listenforcer-plugin: Fixed a bug that would only mark the first editable matching a configured selector as an enforced editable. Also when leaving an editable, we now remove the added list properly.
+- **BUG**: floatingmenu: Fixed a bug in the floating menu that the position would not be adjusted if the height of the floating menu changed. This is needed in the topalign mode to not hide parts of the editable.
+- **BUG**: core: Sometimes when putting the cursor at the first position of an editable, the cursor would vanish or be put outside the editable. This has been fixed.
+- **BUG**: abbr-plugin: A possible dereference error was fixed in the plugin.
 
 ## 0.20.23 - 2012/08/24
 
